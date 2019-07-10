@@ -129,26 +129,21 @@ def save_forecast_timeseries_to_db(pool, timeseries, run_date, run_time, tms_met
     #         'variable_id': ''
     #         }
 
-    # Convert date time with offset
     date_time = datetime.strptime('%s %s' % (run_date, run_time), COMMON_DATE_TIME_FORMAT)
-    if 'utcOffset' in tms_meta:
+
+    forecast_timeseries = []
+
+    if 'utcOffset' in tms_meta:    # If there is an offset, shift by offset before proceed
+        print('Shift by utcOffset:', tms_meta['utcOffset'].resolution)
+        # Convert date time with offset
         date_time = date_time + tms_meta['utcOffset']
         run_date = date_time.strftime('%Y-%m-%d')
         run_time = date_time.strftime('%H:%M:%S')
-
-    # If there is an offset, shift by offset before proceed
-    forecast_timeseries = []
-    if 'utcOffset' in tms_meta:
-        print('Shift by utcOffset:', tms_meta['utcOffset'].resolution)
         for item in timeseries:
             forecast_timeseries.append(
                     [datetime.strptime(item[0], COMMON_DATE_TIME_FORMAT) + tms_meta['utcOffset'], item[1]])
-
-        forecast_timeseries = extractForecastTimeseries(timeseries=forecast_timeseries, extract_date=run_date,
-                extract_time=run_time)
     else:
-        forecast_timeseries = extractForecastTimeseries(timeseries=timeseries, extract_date=run_date,
-                extract_time=run_time)
+        forecast_timeseries = timeseries
 
     try:
 
