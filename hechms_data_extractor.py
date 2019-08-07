@@ -77,10 +77,10 @@ def getUTCOffset(utcOffset, default=False):
         else:
             return False
 
-    if utcOffset[0]=="-":  # If timestamp in negtive zone, add it to current time
+    if utcOffset[0]=="+":  # If timestamp in positive zone, add it to current time
         offset_str = utcOffset[1:].split(':')
         return timedelta(hours=int(offset_str[0]), minutes=int(offset_str[1]))
-    if utcOffset[0]=="+":  # If timestamp in positive zone, deduct it to current time
+    if utcOffset[0]=="-":  # If timestamp in negative zone, deduct it from current time
         offset_str = utcOffset[1:].split(':')
         return timedelta(hours=-1 * int(offset_str[0]), minutes=-1 * int(offset_str[1]))
 
