@@ -6,6 +6,7 @@ from os.path import join as path_join
 from datetime import datetime, timedelta
 import re
 import csv
+import time
 
 from db_adapter.logger import logger
 from db_adapter.constants import COMMON_DATE_TIME_FORMAT, CURW_FCST_DATABASE, CURW_FCST_PASSWORD, CURW_FCST_USERNAME, \
@@ -93,6 +94,13 @@ def isfloat(value):
         return False
 
 
+def get_file_last_modified_time(file_path):
+    # returns local time (UTC + 5 30)
+    modified_time = time.gmtime(os.path.getmtime(file_path) + 19800)
+
+    return time.strftime('%Y-%m-%d %H:%M:%S', modified_time)
+
+
 def extractForecastTimeseries(timeseries, extract_date, extract_time, by_day=False):
     """
     Extracted timeseries upward from given date and time
@@ -117,7 +125,7 @@ def extractForecastTimeseries(timeseries, extract_date, extract_time, by_day=Fal
     return new_timeseries
 
 
-def save_forecast_timeseries_to_db(pool, timeseries, run_date, run_time, tms_meta):
+def save_forecast_timeseries_to_db(pool, timeseries, run_date, run_time, tms_meta, fgt):
     print('EXTRACTFLO2DWATERLEVEL:: save_forecast_timeseries >>', tms_meta)
 
     # {
@@ -157,8 +165,8 @@ def save_forecast_timeseries_to_db(pool, timeseries, run_date, run_time, tms_met
             TS.insert_run(run_meta=tms_meta)
             TS.update_start_date(id_=tms_id, start_date=('%s %s' % (run_date, run_time)))
 
-        TS.insert_data(timeseries=forecast_timeseries, tms_id=tms_id, fgt=('%s %s' % (run_date, run_time)), upsert=True)
-        TS.update_latest_fgt(id_=tms_id, fgt=('%s %s' % (run_date, run_time)))
+        TS.insert_data(timeseries=forecast_timeseries, tms_id=tms_id, fgt=fgt, upsert=True)
+        TS.update_latest_fgt(id_=tms_id, fgt=fgt)
 
     except Exception:
         logger.error("Exception occurred while pushing data to the curw_fcst database")
@@ -223,6 +231,15 @@ if __name__ == "__main__":
         station_name = read_attribute_from_config_file('station_name', config, True)
 
         out_file_path = os.path.join(output_dir, output_file_name)
+
+        if not os.path.exists(out_file_path):
+            msg = 'no file :: {}'.format(out_file_path)
+            logger.warning(msg)
+            print(msg)
+            exit(1)
+
+        fgt = get_file_last_modified_time(out_file_path)
+        print("fgt, ", fgt)
 
         timeseries = read_csv(out_file_path)
 
