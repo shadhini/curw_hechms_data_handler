@@ -2,8 +2,8 @@
   "output_file_name": "DailyDischarge.csv",
   "output_dir": "/home/shadhini/dev/repos/shadhini/hechms_data_handler",
 
-  "run_date": "2019-07-05",
-  "run_time": "00:00:00",
+  "run_date": "2019-09-09",
+  "run_time": "22:00:00",
   "utc_offset": "",
 
   "sim_tag": "hourly_run",
@@ -16,5 +16,5 @@
 
   "variable": "Discharge",
 
-  "station_name": "Hanwella"
+  "station_name": "Glencourse"
 }
