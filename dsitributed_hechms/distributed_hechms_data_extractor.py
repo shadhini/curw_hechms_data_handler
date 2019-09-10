@@ -281,7 +281,7 @@ if __name__ == "__main__":
 
         # Push timeseries to database
         save_forecast_timeseries_to_db(pool=pool, timeseries=timeseries,
-                                       run_date=run_date, run_time=run_time, tms_meta=tms_meta)
+                                       run_date=run_date, run_time=run_time, tms_meta=tms_meta, fgt=fgt)
 
     except Exception as e:
         logger.error('JSON config data loading error.')
