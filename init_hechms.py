@@ -64,10 +64,10 @@ if __name__=="__main__":
             add_station(pool=pool, name=station_name, latitude="%.6f" % float(lat), longitude="%.6f" % float(lon),
                     station_type=StationEnum.HECHMS, description="hecHMS output station")
 
-        destroy_Pool(pool=pool)
-
     except Exception:
         logger.info("Initialization process failed.")
         traceback.print_exc()
     finally:
         logger.info("Initialization process finished.")
+        destroy_Pool(pool=pool)
+

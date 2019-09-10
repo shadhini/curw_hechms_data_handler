@@ -20,12 +20,6 @@ from db_adapter.curw_fcst.timeseries import Timeseries
 
 hechms_stations = {}
 
-USERNAME = "root"
-PASSWORD = "password"
-HOST = "127.0.0.1"
-PORT = 3306
-DATABASE = "curw_fcst"
-
 
 def read_csv(file_name):
     """
@@ -163,7 +157,7 @@ def save_forecast_timeseries_to_db(pool, timeseries, run_date, run_time, tms_met
             tms_id = TS.generate_timeseries_id(meta_data=tms_meta)
             tms_meta['tms_id'] = tms_id
             TS.insert_run(run_meta=tms_meta)
-            TS.update_start_date(id_=tms_id, start_date=('%s %s' % (run_date, run_time)))
+            TS.update_start_date(id_=tms_id, start_date=fgt)
 
         TS.insert_data(timeseries=forecast_timeseries, tms_id=tms_id, fgt=fgt, upsert=True)
         TS.update_latest_fgt(id_=tms_id, fgt=fgt)
@@ -243,9 +237,7 @@ if __name__ == "__main__":
 
         timeseries = read_csv(out_file_path)
 
-        # pool = get_Pool(host=CURW_FCST_HOST, port=CURW_FCST_PORT, db=CURW_FCST_DATABASE, user=CURW_FCST_USERNAME, password=CURW_FCST_PASSWORD)
-
-        pool = get_Pool(host=HOST, port=PORT, user=USERNAME, password=PASSWORD, db=DATABASE)
+        pool = get_Pool(host=CURW_FCST_HOST, port=CURW_FCST_PORT, db=CURW_FCST_DATABASE, user=CURW_FCST_USERNAME, password=CURW_FCST_PASSWORD)
 
         hechms_stations = get_hechms_stations(pool=pool)
 

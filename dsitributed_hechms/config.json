@@ -1,6 +1,6 @@
 {
   "output_file_name": "DailyDischarge.csv",
-  "output_dir": "/home/shadhini/dev/repos/shadhini/hechms_data_handler",
+  "output_dir": "/home/uwcc-admin/distributed_hechms",
 
   "run_date": "2019-09-09",
   "run_time": "22:00:00",
