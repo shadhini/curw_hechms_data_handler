@@ -271,10 +271,6 @@ if __name__ == "__main__":
             print("Please specify the time series start time.")
             usage()
             exit(1)
-        if in_run_time is None:
-            print("Please specify run time.")
-            usage()
-            exit(1)
         if hechms_model is None:
             print("Please specify hechms model.")
             usage()
@@ -290,6 +286,9 @@ if __name__ == "__main__":
         if hechms_model not in ("hechms_distributed", "hechms_single"):
             print("Flo2d model should be either \"hechms_distributed\" or \"hechms_single\"")
             exit(1)
+
+        if in_run_time is None:
+            in_run_time = in_ts_start_time
 
         in_ts_start_time = check_time_format(in_ts_start_time)
         in_run_time = check_time_format(in_run_time)
