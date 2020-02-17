@@ -1,0 +1,13 @@
+{
+  "utc_offset": "",
+
+  "sim_tag": "hourly_run",
+
+  "model": "HECHMS",
+  "version": "distributed",
+
+  "unit": "m3/s",
+  "unit_type": "Instantaneous",
+
+  "variable": "Discharge",
+}
